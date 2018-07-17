@@ -22,6 +22,7 @@
 
             // setup UI DOM
                 namespace = options.namespace || 'scribe-plugin-link-tooltip',
+                keyEvent = options.keyEvent || 'keyup',
                 tooltipNode = (function () {
                     var newTooltip = document.createElement('div'),
                         parentElement = scribe.el.parentNode;
