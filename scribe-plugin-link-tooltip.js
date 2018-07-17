@@ -22,7 +22,8 @@
 
             // setup UI DOM
                 namespace = options.namespace || 'scribe-plugin-link-tooltip',
-                keyEvent = options.keyEvent || 'keyup',
+                eventName = (options.keyEvent || 'keyup').toLowerCase(),
+                keyEvent = (['keydown', 'keyup', 'keypress'].indexOf(eventName) > -1) ? eventName : 'keyup',
                 tooltipNode = (function () {
                     var newTooltip = document.createElement('div'),
                         parentElement = scribe.el.parentNode;
@@ -69,7 +70,6 @@
                             range.selectNode(node);
                             selection.selection.removeAllRanges();
                             selection.selection.addRange(range);
-
                         }
                     }
 
@@ -83,7 +83,7 @@
 
                             /* eslint no-use-before-define:0 */ // circular references
                             ui.applyBtn.removeEventListener('click', link);
-                            ui.linkInput.removeEventListener('keyup', linkOnReturnKey);
+                            ui.linkInput.removeEventListener(keyEvent, linkOnReturnKey);
                             ui.removeBtn.removeEventListener('click', unlink);
                             document.removeEventListener('mouseup', onBlur);
                             window.removeEventListener('resize', repositionTooltip);
@@ -195,7 +195,7 @@
 
                     window.addEventListener('resize', repositionTooltip);
                     ui.applyBtn.addEventListener('click', link);
-                    ui.linkInput.addEventListener('keyup', linkOnReturnKey);
+                    ui.linkInput.addEventListener(keyEvent, linkOnReturnKey);
                     ui.removeBtn.addEventListener('click', unlink);
 
                     // On clicking off the tooltip, hide the tooltip.
