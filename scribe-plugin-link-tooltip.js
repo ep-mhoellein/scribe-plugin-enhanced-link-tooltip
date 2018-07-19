@@ -68,7 +68,6 @@
                             range.selectNode(node);
                             selection.selection.removeAllRanges();
                             selection.selection.addRange(range);
-
                         }
                     }
 
@@ -76,6 +75,14 @@
                 },
 
                 showTooltip = function (state, selection, node, val, submitCallback) {
+                    // if edit state and a callback was handed over => execute callback
+                    if (state === "edit" && options.onBeforeShowTooltip && typeof options.onBeforeShowTooltip === 'function') {
+                        options.onBeforeShowTooltip({
+                            target: ui.applyBtn,
+                            state: state
+                        });
+                    }
+
                     var teardown = function () {
                             isEditState = false;
                             tooltipNode.classList.add(namespace + '-hidden');
@@ -103,6 +110,12 @@
                             teardown();
                         },
                         onBlur = function (e) {
+                            if (options.onBeforeBlur && typeof options.onBeforeBlur === 'function') {
+                                options.onBeforeBlur({
+                                    target: ui.applyBtn
+                                });
+                            }
+
                             var isSameNode = e.target === node,
                                 selfOrParentAnchor = e.target.nodeName === nodeName ?
                                     e.target :
